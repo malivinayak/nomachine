@@ -1,0 +1,104 @@
+;############################################################################
+;#                                                                          #
+;#  Copyright (c) 2012, 2021 NoMachine, http://www.nomachine.com/.          #
+;#                                                                          #
+;#  NXUSB and the NX system are copyright of NoMachine S.a.r.l.             #
+;#                                                                          #
+;#  Redistribution and use of the present software is allowed according     #
+;#  to terms specified in the file LICENSE which comes in the source        #
+;#  distribution.                                                           #
+;#                                                                          #
+;#  Check http://www.nomachine.com/licensing.html for other options.        #
+;#                                                                          #
+;#  NX and NoMachine are trademarks of NoMachine S.a.r.l.                   #
+;#                                                                          #
+;#  All rights reserved.                                                    #
+;#                                                                          #
+;############################################################################
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=NoMachineUsbStub
+ClassGuid={2BE28EB0-BC4A-11E1-9A96-E7C76188709B}
+Provider="NoMachine S.a.r.l."
+DriverVer=08/11/2022,8.0.162.7
+CatalogFile=nxusb.cat
+DriverPackageDisplayName=%UsbStub.SVCDESC%
+
+[DestinationDirs]
+DefaultDestDir = 12
+
+[ClassInstall32]
+Addreg=NoMachineUsbStubClassReg
+CopyFiles=nxusbs_device.NT.Copy     
+
+[NoMachineUsbStubClassReg]
+HKR,,,0,%ClassName%
+HKR,,Icon,,-20
+HKR,,SilentInstall,,1
+HKR,,NoInstallClass,,1
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+nxusbs.sys = 1,,
+
+;*****************************************
+; Install Section
+;*****************************************
+
+[Manufacturer]
+%ManufacturerName%=NoMachine, NTx86, NTia64, NTamd64
+
+;
+;x86
+;
+
+[NoMachine.NTx86]
+%UsbStubDevice.DeviceDesc%=nxusbs_device, nxusbs
+
+;
+;AMD64
+;
+
+[NoMachine.NTamd64]
+%UsbStubDevice.DeviceDesc%=nxusbs_device, nxusbs
+
+;
+;IA64
+;
+
+[NoMachine.NTia64]
+%UsbStubDevice.DeviceDesc%=nxusbs_device, nxusbs
+
+
+[nxusbs_device.NT]
+CopyFiles=nxusbs_device.NT.Copy
+
+[nxusbs_device.NT.Copy]
+nxusbs.sys
+
+
+;-------------- Service installation
+[nxusbs_device.NT.Services]
+AddService = nxusbs, %SPSVCINST_ASSOCSERVICE%, nxusbs_Service_Inst
+
+; -------------- stub driver install sections
+[nxusbs_Service_Inst]
+DisplayName    = %UsbStub.SVCDESC%
+Description    = %UsbStub.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\nxusbs.sys
+LoadOrderGroup = Extended Base
+
+
+[Strings]
+SPSVCINST_ASSOCSERVICE= 0x00000002
+ManufacturerName="NoMachine S.a.r.l."
+ClassName = "NoMachine USB Host Adapter"
+DiskName = "NoMachine USB Host Adapter Disk #1"
+UsbStubDevice.DeviceDesc = "NoMachine USB Host Adapter"
+UsbStub.SVCDESC = "NoMachine USB Host Adapter"

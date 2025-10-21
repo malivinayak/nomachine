@@ -1,0 +1,82 @@
+*GPDSpecVersion: "1.0"
+*Include: "StdNames.gpd"
+*GPDFileVersion: "1.0"
+*GPDFileName: "nxprinter.gpd"
+*ModelName: "NoMachine Printer"
+*MasterUnits: PAIR(1200, 1200)
+*PrinterType: SERIAL
+
+*Feature: PaperSize
+{
+  *rcNameID: =PAPER_SIZE_DISPLAY
+  *DefaultOption: A4
+
+  *Option: A4
+  {
+    *rcNameID: =RCID_DMPAPER_SYSTEM_NAME
+    *PrintableArea: PAIR(9600, 13200)
+    *PrintableOrigin: PAIR(48, 120)
+  }
+}
+*Feature: Resolution
+{
+  *rcNameID: =RESOLUTION_DISPLAY
+  *DefaultOption: 600dpi
+  *Option: 600dpi
+  {
+    *Name: "600 x 600 " =DOTS_PER_INCH
+    *DPI: PAIR(600, 600)
+    *TextDPI: PAIR(600, 600)
+    *SpotDiameter: 100
+    *Command: CmdSendBlockData { *Cmd : "" }
+  }
+}
+*Feature: InputBin
+{
+  *rcNameID: =PAPER_SOURCE_DISPLAY
+  *DefaultOption: MANUAL
+  *Option: MANUAL
+  {
+    *rcNameID: =MANUAL_FEED_DISPLAY
+  }
+}
+*Command: CmdStartDoc
+{
+  *Order: DOC_SETUP.1
+  *Cmd: ""
+}
+*Command: CmdStartPage
+{
+  *Order: PAGE_SETUP.1
+  *Cmd: ""
+}
+
+*RotateCoordinate?: FALSE
+*RotateRaster?: FALSE
+*RotateFont?: FALSE
+
+*CursorXAfterCR: AT_CURSOR_X_ORIGIN
+*YMoveAttributes: LIST(SEND_CR_FIRST)
+*MaxLineSpacing: 255
+*XMoveThreshold: 0
+*YMoveThreshold: *
+*XMoveUnit: 1200
+*YMoveUnit: 1200
+
+*Command: CmdXMoveAbsolute { *Cmd : "" }
+*Command: CmdYMoveRelDown { *Cmd : "" }
+*Command: CmdSetLineSpacing { *Cmd : "" }
+*Command: CmdCR { *Cmd : "" }
+*Command: CmdLF { *Cmd : "" }
+*Command: CmdFF { *Cmd : "" }
+*Command: CmdBackSpace { *Cmd : "" }
+*Command: CmdUniDirectionOn { *Cmd : "" }
+*Command: CmdUniDirectionOff { *Cmd : "" }
+
+*EjectPageWithFF?: TRUE
+*OutputDataFormat: V_BYTE
+*OptimizeLeftBound?: FALSE
+*CursorXAfterSendBlockData: AT_GRXDATA_END
+*CursorYAfterSendBlockData: NO_MOVE
+*DefaultFont: 1
+*DefaultCTT: -1

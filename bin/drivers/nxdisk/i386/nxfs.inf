@@ -1,0 +1,90 @@
+;############################################################################
+;#                                                                          #
+;#  Copyright (c) 2002, 2018 NoMachine, http://www.nomachine.com/.          #
+;#                                                                          #
+;#  NXFS and the NX system are copyright of NoMachine S.r.l.                #
+;#                                                                          #
+;#  Redistribution and use of the present software is allowed according     #
+;#  to terms specified in the file LICENSE which comes in the source        #
+;#  distribution.                                                           #
+;#                                                                          #
+;#  Check http://www.nomachine.com/licensing.html for other options.        #
+;#                                                                          #
+;#  NX and NoMachine are trademarks of NoMachine S.r.l.                     #
+;#                                                                          #
+;#  All rights reserved.                                                    #
+;#                                                                          #
+;############################################################################
+
+; =============== Version =============== (required)
+
+[Version]
+Signature      = "$WINDOWS NT$"
+Provider       = "NoMachine"
+DriverVer      = 02/17/2020,6.9.2.33
+Class          = MEDIA
+ClassGUID      = {4d36e96c-e325-11ce-bfc1-08002be10318}
+
+CatalogFile    = nxfs.cat
+
+; =============== DestinationDirs =============== (optional but recommended)
+
+[DestinationDirs]
+DefaultDestDir = 12
+
+; =============== SourceDisksNames =============== (required)
+
+[SourceDisksNames]
+1 = %Disk1%
+
+; =============== SourceDisksFiles =============== (required)
+
+[SourceDisksFiles]
+nxfs.sys = 1
+
+; =============== DefaultInstall =============== (required)
+
+[DefaultInstall]
+OptionDesc = %ServiceDesc%
+CopyFiles = NXFS.DriverFiles
+
+[NXFS.DriverFiles]
+nxfs.sys
+
+; =============== CrossPlatform =============== (required)
+
+[NoMachine.ntx86]
+%ServiceName%=DefaultInstall, nxfs
+
+[NoMachine.ntia64]
+%ServiceName%=DefaultInstall, nxfs
+
+[NoMachine.ntamd64]
+%ServiceName%=DefaultInstall, nxfs
+
+; =============== DefaultInstall.Services =============== (required)
+
+[DefaultInstall.Services]
+AddService = %ServiceName%,,NXFS.Service
+
+; =============== ServiceInstall =============== (required)
+
+[NXFS.Service]
+DisplayName    = %ServiceName%
+Description    = %ServiceDesc%
+ServiceBinary  = %12%\nxfs.sys
+ServiceType    = 2 ;    SERVICE_FILE_SYSTEM_DRIVER
+StartType      = 3 ;    SERVICE_DEMAND_START
+ErrorControl   = 1 ;    SERVICE_ERROR_NORMAL
+AddReg         = NXFS.AddRegistry
+
+[NXFS.AddRegistry]
+HKR,,Driver,,nxfs.sys
+
+; =============== Strings =============== (required)
+
+[Strings]
+ManufacturerName="NoMachine"
+ServiceDesc = "NoMachine Disk Adapter Service"
+ServiceName = "NoMachine Disk Adapter"
+Disk1       = "NoMachine Disk Adapter #1"

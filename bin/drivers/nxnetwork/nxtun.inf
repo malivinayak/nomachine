@@ -1,0 +1,74 @@
+[Version]
+   Signature = "$Windows NT$"
+   CatalogFile = nxtun.cat
+   ClassGUID = {4d36e972-e325-11ce-bfc1-08002be10318}
+   Provider = %Provider%
+   Class = Net
+   DriverVer=05/28/2012,4.0.1.0
+   DriverPackageDisplayName = %DeviceDescription%
+[Strings]
+   DeviceDescription = "NoMachine VPN Adapter"
+   Provider = "NoMachine"
+[Manufacturer]
+   %Provider% = nxtun, NTx86, NTia64, NTamd64
+[nxtun.NTamd64]
+   %DeviceDescription% = nxtun.ndi, nxtun
+[nxtun.NTx86]
+   %DeviceDescription% = nxtun.ndi, nxtun
+[nxtun.NTia64]
+   %DeviceDescription% = nxtun.ndi, nxtun
+[nxtun.NTamd64]
+   %DeviceDescription% = nxtun.ndi, nxtun
+[nxtun.ndi]
+   CopyFiles       = nxtun.driver, nxtun.files
+   AddReg          = nxtun.reg
+   AddReg          = nxtun.params.reg
+   Characteristics = 0x81
+[nxtun.ndi.Services]
+   AddService = nxtun,        2, nxtun.service
+[nxtun.reg]
+   HKR, Ndi,            Service,      0, "nxtun"
+   HKR, Ndi\Interfaces, UpperRange,   0, "ndis5"
+   HKR, Ndi\Interfaces, LowerRange,   0, "ethernet"
+   HKR, ,               Manufacturer, 0, "%Provider%"
+   HKR, ,               ProductName,  0, "%DeviceDescription%"
+[nxtun.params.reg]
+   HKR, Ndi\params\MTU,                  ParamDesc, 0, "MTU"
+   HKR, Ndi\params\MTU,                  Type,      0, "int"
+   HKR, Ndi\params\MTU,                  Default,   0, "1500"
+   HKR, Ndi\params\MTU,                  Optional,  0, "0"
+   HKR, Ndi\params\MTU,                  Min,       0, "100"
+   HKR, Ndi\params\MTU,                  Max,       0, "1500"
+   HKR, Ndi\params\MTU,                  Step,      0, "1"
+   HKR, Ndi\params\MediaStatus,          ParamDesc, 0, "Media Status"
+   HKR, Ndi\params\MediaStatus,          Type,      0, "enum"
+   HKR, Ndi\params\MediaStatus,          Default,   0, "0"
+   HKR, Ndi\params\MediaStatus,          Optional,  0, "0"
+   HKR, Ndi\params\MediaStatus\enum,     "0",       0, "Application Controlled"
+   HKR, Ndi\params\MediaStatus\enum,     "1",       0, "Always Connected"
+   HKR, Ndi\params\MAC,                  ParamDesc, 0, "MAC Address"
+   HKR, Ndi\params\MAC,                  Type,      0, "edit"
+   HKR, Ndi\params\MAC,                  Optional,  0, "1"
+   HKR, Ndi\params\AllowNonAdmin,        ParamDesc, 0, "Non-Admin Access"
+   HKR, Ndi\params\AllowNonAdmin,        Type,      0, "enum"
+   HKR, Ndi\params\AllowNonAdmin,        Default,   0, "1"
+   HKR, Ndi\params\AllowNonAdmin,        Optional,  0, "0"
+   HKR, Ndi\params\AllowNonAdmin\enum,   "0",       0, "Not Allowed"
+   HKR, Ndi\params\AllowNonAdmin\enum,   "1",       0, "Allowed"
+[nxtun.service]
+   DisplayName = %DeviceDescription%
+   ServiceType = 1
+   StartType = 3
+   ErrorControl = 1
+   LoadOrderGroup = NDIS
+   ServiceBinary = %12%\nxtun.sys
+[SourceDisksNames]
+   1 = %DeviceDescription%, nxtun.sys
+[SourceDisksFiles]
+   nxtun.sys = 1
+[DestinationDirs]
+   nxtun.files  = 11
+   nxtun.driver = 12
+[nxtun.files]
+[nxtun.driver]
+   nxtun.sys,,,6     ; COPYFLG_NOSKIP | COPYFLG_NOVERSIONCHECK

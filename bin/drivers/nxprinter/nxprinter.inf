@@ -1,0 +1,50 @@
+;############################################################################
+;#                                                                          #
+;#  Copyright (c) 2012, 2012 NoMachine, http://www.nomachine.com/.          #
+;#                                                                          #
+;#  NXPRINTER and the NX system are copyright of NoMachine S.r.l.           #
+;#                                                                          #
+;#  Redistribution and use of the present software is allowed according     #
+;#  to terms specified in the file LICENSE which comes in the source        #
+;#  distribution.                                                           #
+;#                                                                          #
+;#  Check http://www.nomachine.com/licensing.html for other options.        #
+;#                                                                          #
+;#  NX and NoMachine are trademarks of NoMachine S.r.l.                     #
+;#                                                                          #
+;#  All rights reserved.                                                    #
+;#                                                                          #
+;############################################################################
+
+[Version]
+Signature="$Windows NT$"
+Provider="NoMachine"
+ClassGUID={4D36E979-E325-11CE-BFC1-08002BE10318}
+Class=Printer
+CatalogFile=nxprinter.cat
+DriverVer=08/29/2013,4.0.1.0
+DriverPackageDisplayName="NoMachine Printer Adapter"
+
+[Manufacturer]
+"NoMachine" = nxprinter, NTamd64
+
+[nxprinter]
+"NoMachine Printer" = nxprinter.gpd, nxprinter
+
+[nxprinter.NTamd64]
+"NoMachine Printer" = nxprinter.gpd, nxprinter
+
+[nxprinter.gpd]
+CopyFiles=@nxprinter.gpd
+DataSection=UNIDRV_DATA
+Include=NTPRINT.INF
+Needs=UNIDRV.OEM,TTFSUB.OEM
+
+[DestinationDirs]
+DefaultDestDir=66000
+
+[SourceDisksNames]
+1 = "NoMachine Printer Disk"
+
+[SourceDisksFiles]
+nxprinter.gpd = 1

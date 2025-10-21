@@ -1,0 +1,177 @@
+[Version]
+Signature="$CHICAGO$"
+Class=MEDIA
+Provider="NoMachine"
+ClassGUID={4d36e96c-e325-11ce-bfc1-08002be10318}
+CatalogFile=nxaudio.cat
+DriverVer=10/08/2019,6.8.1.161
+DriverPackageDisplayName=%NXVAC.Name%
+
+[SourceDisksNames]
+1 = "NoMachine Audio Card Disk"
+
+[Manufacturer]
+"NoMachine"=NX
+
+[DestinationDirs]
+CopyList = 12  ; \system32\drivers
+
+[NX]
+"NoMachine Audio Adapter"=NXVAC, *NXVAC
+"NoMachine Microphone Adapter"=NXVVC, *NXVVC
+
+;
+; NoMachine Audio Adapter.
+;
+
+;
+; 32-bit sections.
+;
+
+[CopyList]
+nxaudio.sys
+
+[SourceDisksFiles.x86]
+nxaudio.sys = 1,,
+
+[NXVAC]
+Include   = ks.inf, wdmaudio.inf
+Needs     = KS.Registration, WDMAUDIO.Registration
+CopyFiles = CopyList
+AddReg    = NXVAC.AddReg
+
+[NXVAC.NT.Interfaces]
+AddInterface = %KSCATEGORY_AUDIO%,   "Wave",     NXVAC.I.Wave
+AddInterface = %KSCATEGORY_RENDER%,  "Wave",     NXVAC.I.Wave
+AddInterface = %KSCATEGORY_CAPTURE%, "Wave",     NXVAC.I.Wave
+AddInterface = %KSCATEGORY_AUDIO%,   "Topology", NXVAC.I.Topo
+
+[NXVAC.AddReg]
+HKR,,AssociatedFilters,, "wdmaud,swmidi,redbook"
+HKR,,Driver,,nxaudio.sys
+
+HKR,Drivers,SubClasses,, "wave,midi,mixer"
+
+HKR,Drivers\wave\wdmaud.drv,  Driver,, wdmaud.drv
+HKR,Drivers\midi\wdmaud.drv,  Driver,, wdmaud.drv
+HKR,Drivers\mixer\wdmaud.drv, Driver,, wdmaud.drv
+
+HKR,Drivers\wave\wdmaud.drv,  Description,, "NoMachine Wave"
+HKR,Drivers\midi\wdmaud.drv,  Description,, "NoMachine MIDI"
+HKR,Drivers\mixer\wdmaud.drv, Description,, "NoMachine Mixer"
+
+HKLM,%MediaCategories%\%NXVAC.NameGuid%,Name,,%NXVAC.Name%
+
+[NXVAC.I.Wave]
+AddReg=NXVAC.I.Wave.AddReg
+
+[NXVAC.I.Wave.AddReg]
+HKR,,CLSID,,%Proxy.CLSID%
+HKR,,FriendlyName,,"NoMachine Audio Adapter"
+
+[NXVAC.I.Topo]
+AddReg=NXVAC.I.Topo.AddReg
+
+[NXVAC.I.Topo.AddReg]
+HKR,,CLSID,,%Proxy.CLSID%
+HKR,,FriendlyName,,"NoMachine Audio Topology"
+
+[NXVAC.NT]
+Include=ks.inf,wdmaudio.inf
+Needs=KS.Registration, WDMAUDIO.Registration
+CopyFiles=CopyList
+AddReg=NXVAC.AddReg
+
+[NXVAC.NT.Services]
+AddService = nxaudio, 0x00000002, nxaudio_service_Inst
+
+[nxaudio_service_Inst]
+DisplayName   = "NoMachine Audio Adapter"
+ServiceType   = 1
+StartType     = 3
+ErrorControl  = 1
+ServiceBinary = %10%\system32\drivers\nxaudio.sys
+
+;
+; NoMachine Microphone Adapter.
+;
+
+;
+; 32-bit sections.
+;
+
+[NXVVC]
+Include   = ks.inf, wdmaudio.inf
+Needs     = KS.Registration, WDMAUDIO.Registration
+CopyFiles = CopyList
+AddReg    = NXVVC.AddReg
+
+[NXVVC.NT.Interfaces]
+AddInterface = %KSCATEGORY_AUDIO%,   "Wave",     NXVVC.I.Wave
+AddInterface = %KSCATEGORY_RENDER%,  "Wave",     NXVVC.I.Wave
+AddInterface = %KSCATEGORY_CAPTURE%, "Wave",     NXVVC.I.Wave
+AddInterface = %KSCATEGORY_AUDIO%,   "Topology", NXVVC.I.Topo
+
+[NXVVC.AddReg]
+HKR,,AssociatedFilters,, "wdmaud,swmidi,redbook"
+HKR,,Driver,,nxaudio.sys
+
+HKR,Drivers,SubClasses,, "wave,midi,mixer"
+
+HKR,Drivers\wave\wdmaud.drv,  Driver,, wdmaud.drv
+HKR,Drivers\midi\wdmaud.drv,  Driver,, wdmaud.drv
+HKR,Drivers\mixer\wdmaud.drv, Driver,, wdmaud.drv
+
+HKR,Drivers\wave\wdmaud.drv,  Description,, "NoMachine Wave"
+HKR,Drivers\midi\wdmaud.drv,  Description,, "NoMachine MIDI"
+HKR,Drivers\mixer\wdmaud.drv, Description,, "NoMachine Mixer"
+
+HKLM,%MediaCategories%\%NXVVC.NameGuid%,Name,,%NXVVC.Name%
+
+[NXVVC.I.Wave]
+AddReg=NXVVC.I.Wave.AddReg
+
+[NXVVC.I.Wave.AddReg]
+HKR,,CLSID,,%Proxy.CLSID%
+HKR,,FriendlyName,,"NoMachine Microphone Adapter"
+
+[NXVVC.I.Topo]
+AddReg=NXVVC.I.Topo.AddReg
+
+[NXVVC.I.Topo.AddReg]
+HKR,,CLSID,,%Proxy.CLSID%
+HKR,,FriendlyName,,"NoMachine Audio Topology"
+
+[NXVVC.NT]
+Include=ks.inf,wdmaudio.inf
+Needs=KS.Registration, WDMAUDIO.Registration
+CopyFiles=CopyList
+AddReg=NXVVC.AddReg
+
+[NXVVC.NT.Services]
+AddService = nxaudio, 0x00000002, NXVVC_Service_Inst
+
+[NXVVC_Service_Inst]
+DisplayName   = "NoMachine Audio Adapter"
+ServiceType   = 1
+StartType     = 3
+ErrorControl  = 1
+ServiceBinary = %10%\system32\drivers\nxaudio.sys
+
+; //
+; // Non-localized strings
+; //
+
+[Strings]
+Proxy.CLSID        = "{17CCA71B-ECD7-11D0-B908-00A0C9223196}"
+KSCATEGORY_AUDIO   = "{6994AD04-93EF-11D0-A3CC-00A0C9223196}"
+KSCATEGORY_RENDER  = "{65E8773E-8F56-11D0-A3B9-00A0C9223196}"
+KSCATEGORY_CAPTURE = "{65E8773D-8F56-11D0-A3B9-00A0C9223196}"
+
+MediaCategories = "SYSTEM\CurrentControlSet\Control\MediaCategories"
+
+NXVAC.NameGuid = "{7FD8CCE3-2055-4abd-8964-B7070AADE83E}"
+NXVAC.Name     = "NoMachine Audio Adapter"
+
+NXVVC.NameGuid = "{ED86ABE7-36BE-4460-BBDB-413EF9B71D1E}"
+NXVVC.Name     = "NoMachine Microphone Adapter"

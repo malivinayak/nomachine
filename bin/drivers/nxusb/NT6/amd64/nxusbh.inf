@@ -1,0 +1,112 @@
+;############################################################################
+;#                                                                          #
+;#  Copyright (c) 2012, 2021 NoMachine, http://www.nomachine.com/.          #
+;#                                                                          #
+;#  NXUSB and the NX system are copyright of NoMachine S.a.r.l.             #
+;#                                                                          #
+;#  Redistribution and use of the present software is allowed according     #
+;#  to terms specified in the file LICENSE which comes in the source        #
+;#  distribution.                                                           #
+;#                                                                          #
+;#  Check http://www.nomachine.com/licensing.html for other options.        #
+;#                                                                          #
+;#  NX and NoMachine are trademarks of NoMachine S.a.r.l.                   #
+;#                                                                          #
+;#  All rights reserved.                                                    #
+;#                                                                          #
+;############################################################################
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=System
+ClassGuid={4D36E97D-E325-11CE-BFC1-08002BE10318}
+Provider=%ManufacturerName%
+CatalogFile=nxusb.cat
+DriverVer=08/11/2022,8.0.162.7
+DriverPackageDisplayName=%nxusbh.DeviceDesc%
+
+[DestinationDirs]
+DefaultDestDir = 12
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+nxusbh.sys  = 1,,
+
+;*****************************************
+; Install Section
+;*****************************************
+
+[Manufacturer]
+%ManufacturerName%=NoMachine, NTx86, NTia64, NTamd64
+
+;
+; 2000
+;
+
+[NoMachine]
+%nxusbh.DeviceDesc%=nxusbh_device, nxusbh
+
+;
+;x86
+;
+
+[NoMachine.NTx86]
+%nxusbh.DeviceDesc%=nxusbh_device, nxusbh
+
+;
+;AMD64
+;
+
+[NoMachine.NTamd64]
+%nxusbh.DeviceDesc%=nxusbh_device, nxusbh
+
+;
+;IA64
+;
+
+[NoMachine.NTia64]
+%nxusbh.DeviceDesc%=nxusbh_device, nxusbh
+
+
+[nxusbh_device.NT]
+CopyFiles=Drivers_Dir
+
+[nxusbh_device.NT.HW]
+;AddReg=nxusbh_device.NT.AddReg
+
+;[nxusbh_device.NT.AddReg]
+;HKR,,DeviceCharacteristics,0x10001,0x0100         ; Use same security checks on relative opens
+;HKR,,Security,,"D:P(A;;GA;;;BA)(A;;GA;;;SY)"      ; Allow generic-all access to Built-in administrators and Local system 
+
+[Drivers_Dir]
+nxusbh.sys
+
+;
+; Service installation.
+;
+
+[nxusbh_device.NT.Services]
+AddService = nxusbh,%SPSVCINST_ASSOCSERVICE%, nxusbh_Service_Inst
+
+;
+; Driver install sections.
+;
+
+[nxusbh_Service_Inst]
+DisplayName    = %nxusbh.DeviceDesc%
+Description    = %nxusbh.DeviceDesc% 
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\nxusbh.sys
+LoadOrderGroup = Extended Base
+
+
+[Strings]
+SPSVCINST_ASSOCSERVICE= 0x00000002
+ManufacturerName="NoMachine S.a.r.l."
+DiskName = "NoMachine USB Adapter Disk #1"
+nxusbh.DeviceDesc = "NoMachine USB Adapter"
+nxusbh.SVCDESC = "NoMachine USB Adapter"

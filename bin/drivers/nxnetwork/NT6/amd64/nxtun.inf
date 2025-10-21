@@ -1,0 +1,81 @@
+; ****************************************************************************
+; * Copyright (C) 2002-2014 OpenVPN Technologies, Inc.                            *
+; *  This program is free software; you can redistribute it and/or modify    *
+; *  it under the terms of the GNU General Public License version 2          *
+; *  as published by the Free Software Foundation.                           *
+; ****************************************************************************
+
+[Version]
+   Signature = "$Windows NT$"
+   CatalogFile = nxtun.cat
+   ClassGUID = {4d36e972-e325-11ce-bfc1-08002be10318}
+   Provider = %Provider%
+   Class = Net
+   DriverVer = 10/19/2021,8.0.121.1
+[Strings]
+   DeviceDescription = "NoMachine VPN Adapter"
+   Provider = "NoMachine"
+[Manufacturer]
+   %Provider% = nxtun, NTamd64
+[nxtun.NTamd64]
+   %DeviceDescription% = nxtun.ndi, root\nxtun ; Root enumerated
+   %DeviceDescription% = nxtun.ndi, nxtun      ; Legacy
+[nxtun.ndi]
+   CopyFiles       = nxtun.driver, nxtun.files
+   AddReg          = nxtun.reg
+   AddReg          = nxtun.params.reg
+   DelReg          = nxtun.params.delreg
+   Characteristics = 0x1
+   *IfType            = 53  ; IF_TYPE_PROP_VIRTUAL
+   *MediaType         = 0x0 ; NdisMedium802_3
+   *PhysicalMediaType = 0   ; NdisPhysicalMediumUnspecified
+[nxtun.ndi.Services]
+   AddService = nxtun,        2, nxtun.service
+[nxtun.reg]
+   HKR, Ndi,            Service,      0, "nxtun"
+   HKR, Ndi\Interfaces, UpperRange,   0, "ndis5"
+   HKR, Ndi\Interfaces, LowerRange,   0, "ethernet"
+   HKR, ,               Manufacturer, 0, "%Provider%"
+   HKR, ,               ProductName,  0, "%DeviceDescription%"
+[nxtun.params.reg]
+   HKR, Ndi\params\MTU,                  ParamDesc, 0, "MTU"
+   HKR, Ndi\params\MTU,                  Type,      0, "int"
+   HKR, Ndi\params\MTU,                  Default,   0, "1500"
+   HKR, Ndi\params\MTU,                  Optional,  0, "0"
+   HKR, Ndi\params\MTU,                  Min,       0, "100"
+   HKR, Ndi\params\MTU,                  Max,       0, "1500"
+   HKR, Ndi\params\MTU,                  Step,      0, "1"
+   HKR, Ndi\params\MediaStatus,          ParamDesc, 0, "Media Status"
+   HKR, Ndi\params\MediaStatus,          Type,      0, "enum"
+   HKR, Ndi\params\MediaStatus,          Default,   0, "0"
+   HKR, Ndi\params\MediaStatus,          Optional,  0, "0"
+   HKR, Ndi\params\MediaStatus\enum,     "0",       0, "Application Controlled"
+   HKR, Ndi\params\MediaStatus\enum,     "1",       0, "Always Connected"
+   HKR, Ndi\params\NetworkAddress,       ParamDesc, 0, "MAC Address"
+   HKR, Ndi\params\NetworkAddress,       Type,      0, "edit"
+   HKR, Ndi\params\NetworkAddress,       Optional,  0, "1"
+   HKR, Ndi\params\AllowNonAdmin,        ParamDesc, 0, "Non-Admin Access"
+   HKR, Ndi\params\AllowNonAdmin,        Type,      0, "enum"
+   HKR, Ndi\params\AllowNonAdmin,        Default,   0, "1"
+   HKR, Ndi\params\AllowNonAdmin,        Optional,  0, "0"
+   HKR, Ndi\params\AllowNonAdmin\enum,   "0",       0, "Not Allowed"
+   HKR, Ndi\params\AllowNonAdmin\enum,   "1",       0, "Allowed"
+[nxtun.params.delreg]
+   HKR, Ndi\params\MAC
+[nxtun.service]
+   DisplayName = %DeviceDescription%
+   ServiceType = 1
+   StartType = 3
+   ErrorControl = 1
+   LoadOrderGroup = NDIS
+   ServiceBinary = %12%\nxtun.sys
+[SourceDisksNames]
+   1 = %DeviceDescription%, nxtun.sys
+[SourceDisksFiles]
+   nxtun.sys = 1
+[DestinationDirs]
+   nxtun.files  = 11
+   nxtun.driver = 12
+[nxtun.files]
+[nxtun.driver]
+   nxtun.sys,,,6     ; COPYFLG_NOSKIP | COPYFLG_NOVERSIONCHECK
